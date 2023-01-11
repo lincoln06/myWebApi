@@ -1,15 +1,15 @@
-﻿using MyFirstWebApi.Models;
-using System.Collections;
+﻿using Microsoft.AspNetCore.Mvc;
+using MyFirstWebApi.Models;
 using System.Collections.Generic;
 
 namespace MyFirstWebApi.Interfaces
 {
-    public interface ISongService
+    public interface ISQLiteCrud
     {
-        void AddNewSong(Song song);
+        void AddNewSong(Song newSong);
         bool DeleteSongById(int id);
         IEnumerable<Song> GetAllSongs();
-        Song GetSongById(int id);
+        object GetSongById(int id);
         void UpdateSong(Song songToUpdate);
     }
 }

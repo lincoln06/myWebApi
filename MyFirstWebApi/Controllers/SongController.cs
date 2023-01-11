@@ -14,18 +14,19 @@ namespace MyFirstWebApi.Controllers
     public class SongController : ControllerBase
     {
         private readonly ILogger<SongController> _logger;
-        private readonly ISongService _songService;
+        //private readonly ISongService _sqliteCrud;
+        private readonly ISQLiteCrud _sqliteCrud;
 
-        public SongController(ILogger<SongController> logger, ISongService songService)
+        public SongController(ILogger<SongController> logger, ISQLiteCrud sqliteCrud)
         {
             _logger = logger;
-            _songService = songService;
+            _sqliteCrud = sqliteCrud;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Song>> Get()
         {
-            var result = _songService.GetAllSongs();
+            IEnumerable<Song> result = _sqliteCrud.GetAllSongs();
             if (result.Any())
               return  Ok(result);
             return NotFound();
@@ -33,7 +34,7 @@ namespace MyFirstWebApi.Controllers
         [HttpGet("GetSongById")]
         public ActionResult<Song> GetSongById([FromQuery]int id)
         {
-            var result=_songService.GetSongById(id);
+            var result=_sqliteCrud.GetSongById(id);
             if (result is null) 
                 return NotFound();
             return Ok(result);
@@ -41,13 +42,13 @@ namespace MyFirstWebApi.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] Song newSong)
         {
-            _songService.AddNewSong(newSong);
+            _sqliteCrud.AddNewSong(newSong);
             return Created("",newSong);
         }
         [HttpDelete]
         public ActionResult<Song> DeleteSongById([FromQuery]int id)
         {
-            bool result = _songService.DeleteSongById(id);
+            bool result = _sqliteCrud.DeleteSongById(id);
             if (!result)
                 return NotFound();
             return Ok();
@@ -55,7 +56,7 @@ namespace MyFirstWebApi.Controllers
         [HttpPut]
         public ActionResult UpdateSong([FromBody]Song songToUpdate)
         {
-            _songService.UpdateSong(songToUpdate);
+            _sqliteCrud.UpdateSong(songToUpdate);
             return Ok();
         }
     }
